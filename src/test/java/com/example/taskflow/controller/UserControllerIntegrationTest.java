@@ -1,35 +1,33 @@
 package com.example.taskflow.controller;
 
 import com.example.taskflow.dto.user.UserCreateDto;
-import com.example.taskflow.security.JwtFilter;
-import com.example.taskflow.service.UserService;
+import com.example.taskflow.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.taskflow.service.UserService;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Permet de jour des tests sur toute la stack Controller -> persistance
  */
-@WebMvcTest(UserController.class)
+@SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("dev")
-class UserControllerTest {
-
-    @MockitoBean
-    private JwtFilter jwtFilter;
+class UserControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
 
-    @MockitoBean
+    @Autowired
     private UserService service;
 
     @Test
@@ -46,5 +44,8 @@ class UserControllerTest {
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
+
+        User john = service.findByUsername("john");
+        Assertions.assertEquals("john@test.com", john.getEmail());
     }
 }
