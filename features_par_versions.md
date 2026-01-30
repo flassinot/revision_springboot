@@ -73,10 +73,18 @@ Pattern matching switch (final) — switch moderne, exhaustif, puissant.
 🧭 Résumé ultra‑condensé
 Si tu dois retenir les 6 features les plus structurantes encore massivement utilisées :
 
+
 Version	Feature
+
 Java 5	Generics
+
 Java 7	Try‑with‑resources
+
 Java 8	Lambdas & Streams
+
 Java 11	HttpClient
+
 Java 16	Records
-Java 21	Virtual
+
+Java 21	Virtual threads
+
