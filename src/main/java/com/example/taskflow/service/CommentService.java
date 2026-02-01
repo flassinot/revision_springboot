@@ -2,6 +2,7 @@ package com.example.taskflow.service;
 
 import com.example.taskflow.dto.user.CommentCreateDto;
 import com.example.taskflow.dto.user.CommentDto;
+import com.example.taskflow.dto.user.CommentRecord;
 import com.example.taskflow.model.Comment;
 import com.example.taskflow.model.Task;
 import com.example.taskflow.model.User;
@@ -21,7 +22,7 @@ public class CommentService {
         this.userService = userService;
     }
 
-    public CommentDto create(CommentCreateDto dto) {
+    public CommentRecord create(CommentCreateDto dto) {
         Task task = taskService.findById(dto.getTaskId());
         User author = userService.findById(dto.getAuthorId());
 
@@ -32,7 +33,13 @@ public class CommentService {
 
         repo.save(c);
 
-        return toDto(c);
+        return new CommentRecord(
+                c.getId(),
+                c.getContent(),
+                c.getAuthor().getId(),
+                c.getTask().getId(),
+                c.getCreatedAt()
+        );
     }
 
     private CommentDto toDto(Comment c) {
