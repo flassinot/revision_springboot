@@ -3,6 +3,7 @@ package com.example.taskflow.service;
 import com.example.taskflow.dto.user.UserCreateDto;
 import com.example.taskflow.dto.user.UserRecord;
 import com.example.taskflow.exception.NotFoundException;
+import com.example.taskflow.kafka.KafkaClient;
 import com.example.taskflow.model.User;
 import com.example.taskflow.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository repo;
+    private final KafkaClient kafkaClient;
 
-    public UserService(UserRepository repo) {
+    public UserService(UserRepository repo, KafkaClient kafkaClient) {
         this.repo = repo;
+        this.kafkaClient = kafkaClient;
     }
 
     public UserRecord create(UserCreateDto dto) {
@@ -23,6 +26,7 @@ public class UserService {
         user.setPassword(dto.password()); // hash plus tard
 
         repo.save(user);
+        kafkaClient.sendMessage("User créé : " + user.getUsername());
 
         return new UserRecord(user.getId(), user.getUsername(), user.getEmail());
     }
