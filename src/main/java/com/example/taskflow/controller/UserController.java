@@ -1,12 +1,11 @@
 package com.example.taskflow.controller;
 
 import com.example.taskflow.dto.user.UserCreateDto;
-import com.example.taskflow.dto.user.UserDto;
+import com.example.taskflow.dto.user.UserRecord;
+import com.example.taskflow.model.User;
 import com.example.taskflow.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,12 +18,13 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserCreateDto dto) {
+    public UserRecord create(@Valid @RequestBody UserCreateDto dto) {
         return service.create(dto);
     }
 
     @GetMapping("/{id}")
-    public UserDto findById(@PathVariable Long id) {
-        return service.toDto(service.findById(id));
+    public UserRecord findById(@PathVariable Long id) {
+        User user = service.findById(id);
+        return new UserRecord(user.getId(), user.getUsername(), user.getEmail());
     }
 }

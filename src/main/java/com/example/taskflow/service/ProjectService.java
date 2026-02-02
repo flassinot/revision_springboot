@@ -1,7 +1,7 @@
 package com.example.taskflow.service;
 
 import com.example.taskflow.dto.user.ProjectCreateDto;
-import com.example.taskflow.dto.user.ProjectDto;
+import com.example.taskflow.dto.user.ProjectRecord;
 import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.model.Project;
 import com.example.taskflow.model.User;
@@ -9,6 +9,7 @@ import com.example.taskflow.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -21,7 +22,7 @@ public class ProjectService {
         this.userService = userService;
     }
 
-    public ProjectDto create(ProjectCreateDto dto, Long ownerId) {
+    public ProjectRecord create(ProjectCreateDto dto, Long ownerId) {
         User owner = userService.findById(ownerId);
 
         Project p = new Project();
@@ -33,21 +34,18 @@ public class ProjectService {
 
         repo.save(p);
 
-        return toDto(p);
+        return getProjectRecord(p);
+    }
+
+    public ProjectRecord getProjectRecord(Project p) {
+        return new ProjectRecord(p.getId(), p.getName(), p.getDescription(), p.getOwner().getId(),
+                p.getMembers().stream()
+                        .map(User::getId)
+                        .collect(Collectors.toSet()));
     }
 
     public Project findById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Project not found: " + id));
-    }
-
-    public ProjectDto toDto(Project p) {
-        ProjectDto dto = new ProjectDto();
-        dto.setId(p.getId());
-        dto.setName(p.getName());
-        dto.setDescription(p.getDescription());
-        dto.setOwnerId(p.getOwner().getId());
-        dto.setMemberIds(p.getMembers().stream().map(User::getId).collect(java.util.stream.Collectors.toSet()));
-        return dto;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.taskflow.service;
 
 import com.example.taskflow.dto.user.TaskCreateDto;
-import com.example.taskflow.dto.user.TaskDto;
+import com.example.taskflow.dto.user.TaskRecord;
 import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.model.Project;
 import com.example.taskflow.model.Task;
@@ -22,7 +22,7 @@ public class TaskService {
         this.userService = userService;
     }
 
-    public TaskDto create(TaskCreateDto dto) {
+    public TaskRecord create(TaskCreateDto dto) {
         Project project = projectService.findById(dto.getProjectId());
 
         Task t = new Task();
@@ -38,23 +38,12 @@ public class TaskService {
 
         repo.save(t);
 
-        return toDto(t);
+        return new TaskRecord(t.getId(), t.getTitle(), t.getDescription(), t.getStatus(), t.getDueDate(),
+                t.getProject().getId(), t.getAssignee().getId());
     }
 
     public Task findById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found: " + id));
-    }
-
-    public TaskDto toDto(Task t) {
-        TaskDto dto = new TaskDto();
-        dto.setId(t.getId());
-        dto.setTitle(t.getTitle());
-        dto.setDescription(t.getDescription());
-        dto.setStatus(t.getStatus());
-        dto.setDueDate(t.getDueDate());
-        dto.setProjectId(t.getProject().getId());
-        dto.setAssigneeId(t.getAssignee() != null ? t.getAssignee().getId() : null);
-        return dto;
     }
 }

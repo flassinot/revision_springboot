@@ -1,7 +1,7 @@
 package com.example.taskflow.controller;
 
 import com.example.taskflow.dto.user.ProjectCreateDto;
-import com.example.taskflow.dto.user.ProjectDto;
+import com.example.taskflow.dto.user.ProjectRecord;
 import com.example.taskflow.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ProjectDto create(
+    public ProjectRecord create(
             @Valid @RequestBody ProjectCreateDto dto,
             @RequestParam Long ownerId
     ) {
@@ -25,7 +25,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ProjectDto findById(@PathVariable Long id) {
-        return service.toDto(service.findById(id));
+    public ProjectRecord findById(@PathVariable Long id) {
+        return service.getProjectRecord(service.findById(id));
     }
 }

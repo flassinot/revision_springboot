@@ -37,10 +37,7 @@ class UserControllerTest {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        UserCreateDto dto = new UserCreateDto();
-        dto.setUsername("john");
-        dto.setEmail("john@test.com");
-        dto.setPassword("123");
+        UserCreateDto dto = new UserCreateDto("john", "john@test.com", "123");
 
         mvc.perform(post("/api/users")
                 .contentType("application/json")

@@ -1,7 +1,6 @@
 package com.example.taskflow.service;
 
 import com.example.taskflow.dto.user.CommentCreateDto;
-import com.example.taskflow.dto.user.CommentDto;
 import com.example.taskflow.dto.user.CommentRecord;
 import com.example.taskflow.model.Comment;
 import com.example.taskflow.model.Task;
@@ -40,15 +39,5 @@ public class CommentService {
                 c.getTask().getId(),
                 c.getCreatedAt()
         );
-    }
-
-    private CommentDto toDto(Comment c) {
-        CommentDto dto = new CommentDto();
-        dto.setId(c.getId());
-        dto.setContent(c.getContent());
-        dto.setAuthorId(c.getAuthor().getId());
-        dto.setTaskId(c.getTask().getId());
-        dto.setCreatedAt(c.getCreatedAt());
-        return dto;
     }
 }

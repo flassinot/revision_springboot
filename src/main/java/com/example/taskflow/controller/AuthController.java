@@ -1,7 +1,7 @@
 package com.example.taskflow.controller;
 
 import com.example.taskflow.dto.user.UserCreateDto;
-import com.example.taskflow.dto.user.UserDto;
+import com.example.taskflow.dto.user.UserRecord;
 import com.example.taskflow.model.User;
 import com.example.taskflow.security.JwtService;
 import com.example.taskflow.service.UserService;
@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserDto register(@Valid @RequestBody UserCreateDto dto) {
+    public UserRecord register(@Valid @RequestBody UserCreateDto dto) {
         return userService.create(dto);
     }
 
