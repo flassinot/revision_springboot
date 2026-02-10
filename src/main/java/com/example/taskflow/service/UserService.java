@@ -1,14 +1,17 @@
 package com.example.taskflow.service;
 
+import com.example.taskflow.annotation.Loggable;
 import com.example.taskflow.dto.user.UserCreateDto;
 import com.example.taskflow.dto.user.UserRecord;
 import com.example.taskflow.exception.NotFoundException;
 import com.example.taskflow.kafka.KafkaClient;
 import com.example.taskflow.model.User;
 import com.example.taskflow.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository repo;
@@ -19,6 +22,7 @@ public class UserService {
         this.kafkaClient = kafkaClient;
     }
 
+    @Loggable
     public UserRecord create(UserCreateDto dto) {
         User user = new User();
         user.setUsername(dto.username());

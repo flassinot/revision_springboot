@@ -1,5 +1,6 @@
 package com.example.taskflow.controller;
 
+import com.example.taskflow.annotation.Loggable;
 import com.example.taskflow.dto.user.UserCreateDto;
 import com.example.taskflow.dto.user.UserRecord;
 import com.example.taskflow.model.User;
@@ -22,11 +23,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Loggable
     public UserRecord register(@Valid @RequestBody UserCreateDto dto) {
         return userService.create(dto);
     }
 
     @PostMapping("/login")
+    @Loggable
     public String login(@RequestParam String username, @RequestParam String password) {
 
         User user = userService.findByUsername(username);
